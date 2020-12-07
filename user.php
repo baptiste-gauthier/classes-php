@@ -18,13 +18,30 @@
 
             $requete = "INSERT INTO utilisateurs(login,password,email,firstname,lastname) 
                             VALUES ('$this->login', '$this->password', '$this->email', '$this->firstname','$this->lastname'
-            )";
+            );";
 
             $query = mysqli_query($db,$requete) ; 
 
             var_dump($query); 
+            var_dump($requete) ; 
 
             echo 'utilisateur ajouté ! ' ; 
+
+            $sql = "SELECT * FROM utilisateurs" ;
+            $exec = mysqli_query($db,$sql) ; 
+
+            $result = mysqli_fetch_all($exec) ; 
+            var_dump($result) ;
+
+            return $result ; 
+
+            //  Partie PDO 
+
+            // $connexion = new PDO("mysql:host=localhost;dbname=classes",'root','') ; 
+            // $connexion -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION) ;
+
+            // $requete = $connexion->prepare("INSERT INTO utilisateurs(login,password,email,firstname,lastname ) VALUES ('$this->login', '$this->password', '$this->email', '$this->firstname','$this->lastname')");   
+            // $requete->execute();
             
         }
     }
@@ -44,7 +61,6 @@
     $user2->lastname = "GIOVANNA" ;
 
     $user2->register(); 
-
 
 
 ?>
