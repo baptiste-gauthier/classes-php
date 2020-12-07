@@ -8,6 +8,14 @@
         public $firstname ; 
         public $lastname ; 
 
+        public function __construct($login,$password,$email,$firstname,$lastname){
+            $this->login = $login ;
+            $this->password = $password ; 
+            $this->email = $email ; 
+            $this->firstname = $firstname ; 
+            $this->lastname = $lastname ; 
+        }
+
         public function register() {
             $db = mysqli_connect("localhost","root","","classes") ; 
 
@@ -25,15 +33,15 @@
             var_dump($query); 
             var_dump($requete) ; 
 
-            echo 'utilisateur ajouté ! ' ; 
+            echo 'utilisateur ajouté !' ; 
 
-            $sql = "SELECT * FROM utilisateurs" ;
+            $sql = "SELECT * FROM utilisateurs ORDER BY id DESC" ;
             $exec = mysqli_query($db,$sql) ; 
 
             $result = mysqli_fetch_all($exec) ; 
-            var_dump($result) ;
+            var_dump($result[0]) ;
 
-            return $result ; 
+            return $result[0] ; 
 
             //  Partie PDO 
 
@@ -46,19 +54,11 @@
         }
     }
 
-    $user1 = new User() ; 
-    $user1->login = "bapt" ;
-    $user1->password = "mdp" ;
-    $user1->email = "baptiste.gauthier@laplateforme.io" ;
-    $user1->firstname = "Baptiste" ;
-    $user1->lastname = "GAUTHIER" ;
+    $user1 = new User("bapt","mdp","baptiste.gauthier@laplateforme.io","Baptiste","GAUTHIER") ; 
+    
 
-    $user2 = new User() ; 
-    $user2->login = "JOJO" ;
-    $user2->password = "pass" ;
-    $user2->email = "jojo@gmail.com" ;
-    $user2->firstname = "Giorno" ;
-    $user2->lastname = "GIOVANNA" ;
+    $user2 = new User("JOJO","pass","jojo@gmail.com","Giorno","Giovanna") ; 
+    
 
     $user2->register(); 
 
