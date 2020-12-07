@@ -10,6 +10,7 @@
         public $lastname ; 
 
         public function __construct($login,$password,$email,$firstname,$lastname){
+            // $this->id = $id ; 
             $this->login = $login ;
             $this->password = $password ; 
             $this->email = $email ; 
@@ -88,19 +89,52 @@
                 echo 'Erreur' ;
             }
 
+        }
 
+        public function disconnect(){
+            session_destroy() ;
+
+            echo 'Vous avez été déconnecté' ; 
+        }
+
+        public function delete(){
+            session_destroy();
+
+            $db = mysqli_connect("localhost","root","","classes") ; 
+
+            if (mysqli_connect_errno()) {
+                printf("Échec de la connexion : %s\n", mysqli_connect_error());
+                exit();
+            }
+
+            $requete = "DELETE FROM `utilisateurs` WHERE login = '$this->login'"; 
+
+            $query = mysqli_query($db,$requete) ;
+
+            var_dump($query) ; 
+
+            echo 'Votre compte à été supprimer' ; 
         }
     }
 
     $user1 = new User("bapt","mdp","baptiste.gauthier@laplateforme.io","Baptiste","GAUTHIER") ; 
-    
 
     $user2 = new User("JOJO","pass","jojo@gmail.com","Giorno","Giovanna") ; 
+
+    $user3 = new User("Charmickael" , "intersecret" , "chuck@buymore.com","Chuck" , "BARTOWSKI") ; 
+
+
     
 
+    // $user1->register(); 
     // $user2->register(); 
+    // $user3->register(); 
 
-    $user1->connect() ; 
+    // $user1->connect() ; 
+
+    // $user2->disconnect();
+
+    // $user3->delete(); 
 
 
 ?>
