@@ -1,4 +1,5 @@
 <?php
+    session_start();
 
     class User {
         private $id ; 
@@ -52,6 +53,43 @@
             // $requete->execute();
             
         }
+
+        public function connect(){
+            $db = mysqli_connect("localhost","root","","classes") ; 
+
+            if (mysqli_connect_errno()) {
+                printf("Échec de la connexion : %s\n", mysqli_connect_error());
+                exit();
+            }
+
+            $requete = "SELECT * FROM utilisateurs 
+                            WHERE login = '$this->login' AND password = '$this->password'" ;
+
+            $query = mysqli_query($db,$requete) ;
+            
+            if($query)
+            {
+                echo 'Bravo vous êtes connecté' ; 
+
+                $resultat = mysqli_fetch_assoc($query) ; 
+
+                var_dump($resultat);
+                $_SESSION['login'] = $this->login ; 
+                $_SESSION['pass'] = $this->password ; 
+                $_SESSION['id'] = $resultat['id'] ; 
+                $_SESSION['email'] = $resultat['email'] ; 
+                $_SESSION['firstname'] = $resultat['firstname'];
+                $_SESSION['lastname'] = $resultat['lastname'] ; 
+
+                return $resultat ; 
+            }
+            else
+            {
+                echo 'Erreur' ;
+            }
+
+
+        }
     }
 
     $user1 = new User("bapt","mdp","baptiste.gauthier@laplateforme.io","Baptiste","GAUTHIER") ; 
@@ -60,7 +98,9 @@
     $user2 = new User("JOJO","pass","jojo@gmail.com","Giorno","Giovanna") ; 
     
 
-    $user2->register(); 
+    // $user2->register(); 
+
+    $user1->connect() ; 
 
 
 ?>
