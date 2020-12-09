@@ -8,7 +8,6 @@
         public $email ; 
         public $firstname ; 
         public $lastname ; 
-        public $connexion ; 
 
         public function __construct($login,$password,$email,$firstname,$lastname){
            
@@ -17,7 +16,6 @@
             $this->email = $email ; 
             $this->firstname = $firstname ; 
             $this->lastname = $lastname ; 
-            $this->connexion = 0 ;
         }
 
         public function register() {
@@ -83,10 +81,16 @@
             
             if($query->num_rows == 1)
             {
+                $result = mysqli_fetch_assoc($query); 
+                var_dump($result) ; 
                 echo 'Bravo vous êtes connecté' ; 
-                $this->connexion = 1 ; 
-                var_dump($this->connexion) ; 
 
+                $this->login = $result['login'] ; 
+                $this->password = $result['password'] ;
+                $this->email = $result['email'] ;
+                $this->firstname = $result['firstname'] ;
+                $this->lastname = $result['lastname'] ;
+                
                 return [$this->login, $this->password] ; 
 
             }
@@ -99,11 +103,14 @@
 
         public function disconnect(){
 
+            $db = mysqli_connect("localhost","root","","classes") ; 
+
             unset($this->login) ;
             unset($this->password) ; 
             unset($this->email) ; 
             unset($this->firstname) ;  
             unset($this->lastname) ;  
+            unset($this->connexion) ;
             
             echo 'Vous avez été déconnecté' ; 
         }
@@ -151,14 +158,44 @@
             if($query)
             {
                 echo 'Changement effectuer ! ' ; 
+                $this->login = $login ; 
+                $this->password = $password ; 
+                $this->email = $email ; 
+                $this->firstname = $firstname ;
+                $this->lastname = $lastname ; 
+
             }
             else{
                 echo 'Erreur' ; 
             }
         }
+
+        pubouc function getAllInfos(){
+            return $this
+        }
+
+        public function isConnected(){
+            $db = mysqli_connect("localhost","root","","classes") ; 
+
+            $requete = "SELECT * FROM utilisateurs " ; 
+            $query = mysqli_query($db,$requete) ;
+
+            $result = mysqli_fetch_assoc($query) ; 
+            var_dump($result) ; 
+
+            if($this->login == $result['login'])
+            {
+                echo 'Bravo vous ête connecter'; 
+            }
+            else
+            {
+                echo 'erreur' ; 
+            }
+
+        }
     }
 
-    $user1 = new User("bapt", "mdp", "baptiste.gauthier@gmail.com", "Baptiste", "GAUTHIER") ; 
+    $user1 = new User("Batman", "joker", "batman@gmail.com", "Bruce", "Wayne") ; 
 
     $user2 = new User("JOJO","pass","jojo@gmail.com","Giorno","Giovanna") ; 
 
@@ -169,11 +206,13 @@
 
     
 
-    //$user1->update("bapt","mdp","baptiste.gauthier@gmail.com","Baptiste","GAUTHIER"); 
-    $user1->connect(); 
-    //$user4->disconnect(); 
+    $user1->update("bapt","mdp","baptiste.gauthier@gmail.com","Baptiste","GAUTHIER"); 
+    //$user1->update("JOJO", "stand", "giorno@giovanna.fr", "Giorno", "Giovanna");
+    //$user1->isConnected(); 
+    // $user1->disconnect(); 
+    //$user1->isConnected(); 
 
-    // $user3->connect() ; 
+    $user1->isConnected() ; 
 
     //$user2->connect();
 
