@@ -65,7 +65,7 @@
             
         }
 
-        public function connect(){
+        public function connect($login,$password){
             $db = mysqli_connect("localhost","root","","classes") ; 
 
             if (mysqli_connect_errno()) {
@@ -74,7 +74,7 @@
             }
 
             $requete = "SELECT * FROM utilisateurs 
-                            WHERE login = '$this->login' AND password = '$this->password'" ;
+                            WHERE login = '$login' AND password = '$password'" ;
 
             $query = mysqli_query($db,$requete) ;
             var_dump($query) ; 
@@ -82,7 +82,6 @@
             if($query->num_rows == 1)
             {
                 $result = mysqli_fetch_assoc($query); 
-                var_dump($result) ; 
                 echo 'Bravo vous êtes connecté' ; 
 
                 $this->login = $result['login'] ; 
@@ -91,7 +90,8 @@
                 $this->firstname = $result['firstname'] ;
                 $this->lastname = $result['lastname'] ;
                 
-                return [$this->login, $this->password] ; 
+                return [$this->login, $this->password,$this->email,$this->firstname,$this->lastname] ;
+                
 
             }
             else
@@ -103,16 +103,15 @@
 
         public function disconnect(){
 
-            $db = mysqli_connect("localhost","root","","classes") ; 
-
-            unset($this->login) ;
-            unset($this->password) ; 
-            unset($this->email) ; 
-            unset($this->firstname) ;  
-            unset($this->lastname) ;  
-            unset($this->connexion) ;
-            
+            $this->login = NULL ;
+            $this->password = NULL ; 
+            $this->email = NULL ; 
+            $this->firstname = NULL ;  
+            $this->lastname = NULL ;  
+           
             echo 'Vous avez été déconnecté' ; 
+
+            return[$this->login, $this->password,$this->email,$this->firstname,$this->lastname];
         }
 
         public function delete(){
@@ -131,11 +130,11 @@
             
             var_dump($query) ; 
             
-            unset($this->login) ;
-            unset($this->password) ; 
-            unset($this->email) ; 
-            unset($this->firstname) ;  
-            unset($this->lastname) ; 
+            $this->login = NULL ;
+            $this->password = NULL ; 
+            $this->email = NULL ; 
+            $this->firstname = NULL ;  
+            $this->lastname = NULL ; 
 
             echo 'Votre compte à été supprimer' ; 
         }
@@ -170,51 +169,90 @@
             }
         }
 
-        pubouc function getAllInfos(){
-            return $this
+        public function getAllInfos(){
+            $allinfos = [$this->login,$this->password,$this->email,$this->firstname,$this->lastname] ; 
+            var_dump($allinfos) ; 
+            return $allinfos ;
         }
 
         public function isConnected(){
-            $db = mysqli_connect("localhost","root","","classes") ; 
-
-            $requete = "SELECT * FROM utilisateurs " ; 
-            $query = mysqli_query($db,$requete) ;
-
-            $result = mysqli_fetch_assoc($query) ; 
-            var_dump($result) ; 
-
-            if($this->login == $result['login'])
+            
+            if($this->login != NULL && $this->password != NULL)
             {
-                echo 'Bravo vous ête connecter'; 
+                echo 'Utilisateur connecté'; 
+                return TRUE ;
             }
             else
             {
                 echo 'erreur' ; 
+                return FALSE ;
             }
 
         }
+
+        public function getLogin(){
+            var_dump($this->login);
+            return $this->login ;
+        }
+
+        public function getEmail(){
+            var_dump($this->email);
+            return $this->email ;
+        }
+
+        public function getFirstname(){
+            var_dump($this->firstname);
+            return $this->firstname ;
+        }
+
+        public function getLastname(){
+            var_dump($this->lastname);
+            return $this->lastname ;
+        }
+
+        public function refresh(){
+            $db = mysqli_connect("localhost","root","","classes") ; 
+
+            $requete = "SELECT * FROM utilisateur WHERE login = '$this->login';";
+            $query = mysqli_query($db,$query) ;
+
+            $result = mysqli_fetch_assoc($query);
+
+            $this->login = $result['login'];
+            $this->password = $result['password'];
+            $this->email = $result['email'];
+            $this->firstname = $result['firstname'];
+            $this->lastname = $result['lastname'];
+        }
+        
     }
 
     $user1 = new User("Batman", "joker", "batman@gmail.com", "Bruce", "Wayne") ; 
 
     $user2 = new User("JOJO","pass","jojo@gmail.com","Giorno","Giovanna") ; 
 
-    $user3 = new User("Charmickael" , "intersecret" , "chuck@buymore.com","Chuck" , "BARTOWSKI") ; 
+    $user3 = new User("Carmickael" , "intersecret" , "chuck@buymore.com","Chuck" , "BARTOWSKI") ; 
 
     $user4 = new User("Colonel", "cia", "john@casey.fr","John","Casey") ; 
 
 
     
 
-    $user1->update("bapt","mdp","baptiste.gauthier@gmail.com","Baptiste","GAUTHIER"); 
+    //$user1->update("bapt","mdp","baptiste.gauthier@gmail.com","Baptiste","GAUTHIER"); 
     //$user1->update("JOJO", "stand", "giorno@giovanna.fr", "Giorno", "Giovanna");
     //$user1->isConnected(); 
     // $user1->disconnect(); 
     //$user1->isConnected(); 
 
-    $user1->isConnected() ; 
+    //$user1->getAllInfos() ; 
 
-    //$user2->connect();
+    //$user3->register();
+    //$user2->connect("JOJO","pass");
+    $user2->disconnect();
+    $user2->getLogin();
+    $user2->getAllInfos();
+    //$user2->getAllInfos();
+    
 
     // $user3->delete(); 
     //$user1->update("BM", "buymore", "morgan@grimes.fr", "Morgan", "Grims") ; 
