@@ -1,6 +1,5 @@
 <?php
     
-
     class User {
         private $id ; 
         public $login ; 
@@ -82,7 +81,6 @@
                 
                 return [$this->login, $this->password,$this->email,$this->firstname,$this->lastname] ;
                 
-
             }
             else
             {
@@ -238,7 +236,7 @@
 
     //$user3->register();
     //$user2->connect("JOJO","pass");
-    $user1->refresh();
+    $user1->update();
     $user1->getAllInfos();
     //$user2->getAllInfos();
     
