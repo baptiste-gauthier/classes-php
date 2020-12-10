@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    
 
     class User {
         private $id ; 
@@ -52,17 +52,7 @@
             {
                 echo 'ce login est déjà utiliser' ; 
             }
-
-
-
-            //  Partie PDO 
-
-            // $connexion = new PDO("mysql:host=localhost;dbname=classes",'root','') ; 
-            // $connexion -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION) ;
-
-            // $requete = $connexion->prepare("INSERT INTO utilisateurs(login,password,email,firstname,lastname ) VALUES ('$this->login', '$this->password', '$this->email', '$this->firstname','$this->lastname')");   
-            // $requete->execute();
-            
+      
         }
 
         public function connect($login,$password){
@@ -213,8 +203,8 @@
         public function refresh(){
             $db = mysqli_connect("localhost","root","","classes") ; 
 
-            $requete = "SELECT * FROM utilisateur WHERE login = '$this->login';";
-            $query = mysqli_query($db,$query) ;
+            $requete = "SELECT * FROM utilisateurs WHERE login = '$this->login';";
+            $query = mysqli_query($db,$requete) ;
 
             $result = mysqli_fetch_assoc($query);
 
@@ -227,7 +217,7 @@
         
     }
 
-    $user1 = new User("Batman", "joker", "batman@gmail.com", "Bruce", "Wayne") ; 
+    $user1 = new User("Mugiwara", "onepiece", "luffy@pirate.fr", "Luffy", "Monkey D") ; 
 
     $user2 = new User("JOJO","pass","jojo@gmail.com","Giorno","Giovanna") ; 
 
@@ -248,9 +238,8 @@
 
     //$user3->register();
     //$user2->connect("JOJO","pass");
-    $user2->disconnect();
-    $user2->getLogin();
-    $user2->getAllInfos();
+    $user1->refresh();
+    $user1->getAllInfos();
     //$user2->getAllInfos();
     
 
