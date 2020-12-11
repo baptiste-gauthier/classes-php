@@ -237,6 +237,8 @@
     //$user3->register();
     //$user2->connect("JOJO","pass");
     $user1->update();
+    $user1->login = "bapt" ; 
+    $user2->password = "mdp"; 
     $user1->getAllInfos();
     //$user2->getAllInfos();
     
@@ -244,4 +246,5 @@
     // $user3->delete(); 
     //$user1->update("BM", "buymore", "morgan@grimes.fr", "Morgan", "Grims") ; 
 
+    $user1 = new User($login = $_POST['login'] etc )
 ?>
