@@ -84,8 +84,30 @@
             }
         }
 
+        public function getTables()
+        {
 
+            $requete = "SHOW TABLES"; 
 
+            $exec = mysqli_query($this->link,$requete) ;
+
+            $resultat = mysqli_fetch_all($exec);
+
+            var_dump($resultat); 
+
+            return $resultat ;
+
+        }
+
+        public function getFields($table)
+        {
+            $requete = "SELECT * FROM $table";
+            $query = mysqli_query($this->link,$requete) ;
+            
+            $table = mysqli_fetch_all($query) ;
+
+            var_dump($table) ;
+        }
 
     }
 
@@ -98,8 +120,8 @@
     var_dump($lpdo1);
 
     $lpdo1->constructeur();
-    $lpdo1->execute("SELECT * FROM utilisateurs");
-    $lpdo1->getLastResult();
+    // $lpdo1->execute("SELECT * FROM utilisateurs");
+    $lpdo1->getFields("utilisateurs");
 
 
 ?>
