@@ -20,6 +20,26 @@
             return $this->link = $link ;
         }
 
+        public function connect(){
+            if(isset($this->link))
+            {
+                mysqli_close($this->link);
+                echo ' Connexion fermé ';
+            }
+
+            $link = mysqli_connect($this->host,$this->username,$this->password,$this->db) ;
+
+            if (mysqli_connect_errno()) {
+                printf("Échec de la connexion : %s\n", mysqli_connect_error());
+                exit();
+            }
+
+            echo 'Connexion ouverte au serveur mysqli'; 
+
+            return $this->link = $link ;
+            
+        }
+
         public function close()
         {
             mysqli_close($this->link);
@@ -28,12 +48,43 @@
 
         public function execute($query)
         {
-            mysqli_query($this->link,$query) ;
+            $requete = mysqli_query($this->link,$query) ;
+            $this->query = $query ;
+            $result = mysqli_fetch_all($requete);
+            $this->result = $result;
+
+            var_dump($this->result);
+
+            return $this->result; 
 
             echo 'requête executé';
-
-            
         }
+
+        public function getLastQuery()
+        {
+            if(isset($this->query))
+            {
+                var_dump($this->query);
+                return $this->query ;
+            }
+            else{
+                return FALSE ; 
+            }
+        }
+
+        public function getLastResult()
+        {
+            if(isset($this->result))
+            {
+                var_dump($this->result);
+                return $this->result ;
+            }
+            else{
+                return FALSE ;
+            }
+        }
+
+
 
 
     }
@@ -47,7 +98,8 @@
     var_dump($lpdo1);
 
     $lpdo1->constructeur();
-    $lpdo1->close();
+    $lpdo1->execute("SELECT * FROM utilisateurs");
+    $lpdo1->getLastResult();
 
 
 ?>
